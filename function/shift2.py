@@ -10,6 +10,7 @@ import csv
  
 
 
+#結合しそうな角の間隔データを保有する点のインデックス番号を保存するための関数。どの角を結合させるべきか？の判定に用いる
 def index(num,dMatposs):
 
   ind = []
@@ -22,14 +23,21 @@ def index(num,dMatposs):
 
 
 
-def center(points,ind):
+#2点間の直線距離を求め、２点の弧の上に中点を配置
+def center(points,ind,m):
 
   centerP = []
   
   for i in range(len(ind)) :
-    x = (points[(ind[i][0])][0] + points[(ind[i][1])][0]) / 2.0
-    y = (points[(ind[i][0])][1] + points[(ind[i][1])][1]) / 2.0
-    z = (points[(ind[i][0])][2] + points[(ind[i][1])][2]) / 2.0
+    xc = (points[(ind[i][0])][0] + points[(ind[i][1])][0]) / 2.0
+    yc = (points[(ind[i][0])][1] + points[(ind[i][1])][1]) / 2.0
+    zc = (points[(ind[i][0])][2] + points[(ind[i][1])][2]) / 2.0
+
+    #座標を球面上の点とするために正規化。引数mは時間変化に応じて
+    Normalize = np.sqrt(xc*xc + yc*yc + zc*zc) + m
+    x = (xc / Normalize) 
+    y = (yc / Normalize) 
+    z = (zc / Normalize) 
 
     centerP.append([x,y,z])
   
@@ -37,9 +45,10 @@ def center(points,ind):
   centerP = np.unique(centerP,axis=0)
   return centerP
 
-def mix(ind,points):
+#新しくできた角と結合が見られなかった角の本数を合計する
+def mix(ind,points,m):
   newPoints = []
-  centerP = center(points,ind)
+  centerP = center(points,ind,m)
   ind = list(itertools.chain.from_iterable(ind))
   ind = np.unique(ind)  
 
