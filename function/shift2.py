@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import itertools
 import csv
- 
+
 
 
 #結合しそうな角の間隔データを保有する点のインデックス番号を保存するための関数。どの角を結合させるべきか？の判定に用いる
